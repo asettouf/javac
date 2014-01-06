@@ -1,4 +1,3 @@
- <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC 
  "-//Hibernate/Hibernate Mapping DTD//EN"
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
@@ -10,8 +9,8 @@
          </id>   
          <property name="codeAlbum" type="integer"></property>         
          <property name="nom" type="string"></property>
-         <set name="chansons" inverse="true" lazy="false" cascade="all,delete-orphan">
-             <key column="CHANSONID"/>
+         <set name="chansons" lazy="false" cascade="all,delete-orphan">
+             <key column="ALBUMID"/>
              <one-to-many class="Chanson"></one-to-many>
          </set>
       </class>

@@ -1,5 +1,6 @@
 package org.asal.jac.services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Album {
@@ -8,6 +9,7 @@ public class Album {
 	private int codeAlbum;
 	private String nom;
 	private Set<Chanson> chansons;
+	private int ARTISTEID;
 	
 	public Album(int codeAlbum,String nom, Set<Chanson> chansons) {
 		super();
@@ -17,10 +19,14 @@ public class Album {
 	}
 	
 	public Album(){
+		super();
+		this.chansons=new HashSet<Chanson>();
 		
 	}
 	
-	
+	public void addChanson(Chanson toAdd){
+		this.chansons.add(toAdd);
+	}
 	public int getCodeAlbum() {
 		return codeAlbum;
 	}
@@ -53,6 +59,14 @@ public class Album {
 
 	public void setChansons(Set<Chanson> chansons) {
 		this.chansons = chansons;
+	}
+
+	public int getARTISTEID() {
+		return ARTISTEID;
+	}
+
+	public void setARTISTEID(int aRTISTEID) {
+		ARTISTEID = aRTISTEID;
 	}
 
 }

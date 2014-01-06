@@ -1,5 +1,6 @@
 package org.asal.jac.services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Artiste {
@@ -18,10 +19,13 @@ public class Artiste {
 
 	
 	public Artiste() {
-		// TODO Auto-generated constructor stub
+		super();
+		this.albums=new HashSet<Album>();
 	}
 
-	
+	public void addAlbum(Album toAdd){
+		this.albums.add(toAdd);
+	}
 	public int getCodeArtiste() {
 		return codeArtiste;
 	}

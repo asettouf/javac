@@ -6,6 +6,7 @@ public class Chanson {
 	private int codeChanson;
 	private String nom;
 	private int duree;
+	private int ALBUMID;
 
 	public Chanson(int codeChanson,String nom, int duree) {
 		super();
@@ -15,7 +16,7 @@ public class Chanson {
 	}
 	
 	public Chanson() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 	
 	
@@ -49,6 +50,14 @@ public class Chanson {
 
 	public void setDuree(int duree) {
 		this.duree = duree;
+	}
+
+	public int getALBUMID() {
+		return ALBUMID;
+	}
+
+	public void setALBUMID(int aLBUMID) {
+		ALBUMID = aLBUMID;
 	}
 
 }

@@ -12,53 +12,48 @@ import org.asal.jac.services.Artiste;
 import org.asal.jac.services.Chanson;
 
 public class FileParser {
-	
+	private static File rightArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\right");
+	private  static File wrongArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\wrong");
+
 	//Attention retour null si sub directory
 	//Si un fichier !.music alors, retrait de la liste
 	public static List<String> filesInDirectory(String path){
 		File dir=new File(path);
-		File[] fileList=dir.listFiles();
+		File[] fileList;
+		if(dir.exists())
+			fileList=dir.listFiles();
+		else
+			fileList=null;
 		List<String> retour = new ArrayList<String>();
 		
 		for (File f:fileList){
+			System.out.println(f.toString());
 			if (!f.isFile()){
-				return null;
+				System.out.println("file "+f.getName()+" null");
+				continue;
 			}
-			if (!f.getName().contains(".music")){
-				return null;
-			}
-			retour.add(f.getName());
-		}
-		
-		for (String name:retour){
-			if (!name.contains(".music")){
-				retour.remove(name);
-			}
+			System.out.println(f.getAbsolutePath());
+			retour.add(f.getAbsolutePath());
 		}
 		return retour;
 	}
 	
 	public static boolean checkLine(String line){
-		int virgules=0;
 		boolean retour=false;
-		for (int i=0;i<line.length();i++){
-			
-			if (virgules==6){
-				if (Character.toString(line.charAt(i)).matches("[0-9]")){
-					retour=true;
-				}
-				else{
-					retour=false;
-				}
-			}
-			
-			if (line.charAt(i)==','){
-					virgules++;
-			}
-		
-		}	
+		String buff=line.replaceAll("\\s+","");
+		System.out.println(line);
+		String[] extractLine=buff.split(",");
+		if (extractLine[0].matches("[0-9]*")&&extractLine[2].matches("[0-9]*")&&extractLine[4].matches("[0-9]*")&&extractLine[6].matches("[0-9]*")){
+			System.out.println("Number Artiste ok");
+			retour=true;
+		}		
+		else{
+			System.out.println("Wrong format");
+			retour=false;
+		}
 		return retour;
 		}
+	
 	
 	//Attention retour null si mauvaise données
 	public static List<String> readLinesFromFile(String path){
@@ -66,6 +61,7 @@ public class FileParser {
 		boolean check=false;
 		try {
 			retour=FileUtils.readLines(new File(path));
+			System.out.println("File found: "+path);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,31 +70,27 @@ public class FileParser {
 		for (String line:retour){
 			check=checkLine(line);
 			if (check==false){
+				System.out.println("Check wrong peace out");//archive file in wrong dir -> toDo
+				archiveFile(path, wrongArchiveDir);
 				return null;
 			}
+			else
+				System.out.println("Check correct");
 		}
 		return retour;
 	}
 	
-	//Watch out, it really suck dicks
-	public static HashMap<Artiste, HashMap<Album, Chanson>> fillHash(String[] data){
-		HashMap<Album, Chanson> mapAlbumChanson=new HashMap<Album,Chanson>();
-		HashMap<Artiste,HashMap<Album, Chanson>> retour=new HashMap<Artiste,HashMap<Album,Chanson>>();
-		Artiste buffArt=new Artiste();
-		Album buffAlb=new Album();
-		Chanson buffChan=new Chanson();
-		buffArt.setCodeArtiste(Integer.parseInt(data[0]));
-		buffArt.setNom(data[1]);
-		buffAlb.setCodeAlbum(Integer.parseInt(data[2]));
-		buffArt.setNom(data[3]);
-		buffChan.setCodeChanson(Integer.parseInt(data[4]));
-		buffChan.setNom(data[5]);
-		buffChan.setDuree(Integer.parseInt(data[5]));
-		mapAlbumChanson.put(buffAlb, buffChan);
-		retour.put(buffArt, mapAlbumChanson);
-		
-		return retour;
+	public static void archiveFile(String file,File destDir){
+		File fileToArchive=new File(file);
+		try {
+			FileUtils.moveFileToDirectory(fileToArchive, destDir, true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	
 	
 	//Boring, returns HashMap of HashMap supposedly containing everything we need
 	public static HashMap<Artiste, HashMap<Album, Chanson>> extractAlbumWithArtiste(String path){
@@ -107,33 +99,55 @@ public class FileParser {
 		List<String> files=filesInDirectory(path);
 		for (String f:files){
 			List<String> data=null;
-			if (f!=null)
-				data=readLinesFromFile(f);
-			else
+			if (!f.contains(".music")){
+				archiveFile(f,wrongArchiveDir);
 				continue;
-			for (String d:data){
-				Artiste buffArt=new Artiste();
-				Album buffAlb=new Album();
-				Chanson buffChan=new Chanson();
-				String[] extractArray;
-				if(d!=null)
-					extractArray=d.split(",");
-				else
-					continue;
-				buffArt.setCodeArtiste(Integer.parseInt(extractArray[0]));
-				buffArt.setNom(extractArray[1]);
-				buffAlb.setCodeAlbum(Integer.parseInt(extractArray[2]));
-				buffArt.setNom(extractArray[3]);
-				buffChan.setCodeChanson(Integer.parseInt(extractArray[4]));
-				buffChan.setNom(extractArray[5]);
-				buffChan.setDuree(Integer.parseInt(extractArray[5]));
-				mapAlbumChanson.put(buffAlb, buffChan);
-				retour.put(buffArt, mapAlbumChanson);				
 			}
-			
+			data=readLinesFromFile(f);
+			if (new File(f).exists()){
+				archiveFile(f,rightArchiveDir);
+			}
+				if (data!=null){
+					ArrayList<Artiste> memArtiste=new ArrayList<Artiste>();
+					int p=0;
+					for (String d:data){
+						Artiste buffArt=new Artiste();
+						Album buffAlb=new Album();
+						Chanson buffChan=new Chanson();
+						String[] extractArray;
+						if(d!=null){
+							System.out.println("String correct");
+							extractArray=d.replaceAll("\\s+","").split(",");
+						}
+						else{
+							System.out.println("String null");
+							continue;
+						}
+						
+						buffArt.setCodeArtiste(Integer.parseInt(extractArray[0]));
+						buffArt.setNom(extractArray[1]);
+						memArtiste.add(buffArt);
+						if(p!=0&&!memArtiste.get(p).getNom().equals(memArtiste.get(p-1).getNom())){
+							retour.put(memArtiste.get(p-1), mapAlbumChanson);
+							System.out.println("fuck you");
+							mapAlbumChanson=new HashMap<Album,Chanson>();
+						}
+						buffAlb.setCodeAlbum(Integer.parseInt(extractArray[2]));
+						buffAlb.setNom(extractArray[3]);
+						buffChan.setCodeChanson(Integer.parseInt(extractArray[4]));
+						buffChan.setNom(extractArray[5]);
+						buffChan.setDuree(Integer.parseInt(extractArray[6]));
+						mapAlbumChanson.put(buffAlb, buffChan);
+						p++;
+					}
+					retour.put(memArtiste.get(p-1), mapAlbumChanson);
+					mapAlbumChanson=new HashMap<Album,Chanson>();
+			}
 		}
 		return retour;
 	}
+	
+	
 	
 
 }

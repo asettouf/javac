@@ -1,4 +1,3 @@
- <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC 
  "-//Hibernate/Hibernate Mapping DTD//EN"
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
@@ -7,13 +6,12 @@
      <class name="Artiste" table="ARTISTE">
          <id name="id" type="integer" column="ID">
              <generator class="native"/>
-         </id>   
-         
-         <property name="codeArtiste" type="integer"></property>
-         <property name="nom" type="string"></property>
-         <set name="albums" inverse="true" lazy="false" cascade="all,delete-orphan">
-             <key column="ALBUMID"/>
-             <one-to-many class="Album"></one-to-many>
+         </id>
+         <property name="codeArtiste" column="CODEARTISTE" type="integer"></property>
+         <property name="nom" column="NOM" type="string"></property>
+         <set name="albums" lazy="false" cascade="all,delete-orphan">
+             <key column="ARTISTEID"/>
+             <one-to-many class="Album"/>
          </set>
       </class>
 </hibernate-mapping>
