@@ -19,13 +19,12 @@ public class DbUtils {
 	
 	private static SessionFactory sFact;
 	
-	private final static String url="jdbc:hsqldb://localhost/db";
-	private final static String createArtiste="CREATE TABLE ARTISTE (ID INTEGER NOT NULL, CODEARTISTE INTEGER NOT NULL,NOM CHAR(25) NOT NULL,  PRIMARY KEY(ID))";
-	private final static String createAlbum="CREATE TABLE ARTISTE (ID INTEGER NOT NULL, CODEALBUM INTEGER NOT NULL,NOM CHAR(25) NOT NULL, ARTISTEID INTEGER NOT NULL,  PRIMARY KEY(ID))";
-	private final static String createChanson="CREATE TABLE ARTISTE (ID INTEGER NOT NULL, CODECHANSON INTEGER NOT NULL,NOM CHAR(25) NOT NULL, DUREE INTEGER NOT NULL, ALBUMID INTEGER NOT NULL,  PRIMARY KEY(ID))";
+	private final static String url="jdbc:hsqldb:hsql//localhost/db";
+	private final static String createArtiste="CREATE TABLE ARTISTE ("+"ID INTEGER NOT NULL,"+ "CODEARTISTE INTEGER NOT NULL,"+"NOM CHAR(25) NOT NULL,"+"PRIMARY KEY(ID)"+")";
+	private final static String createAlbum="CREATE TABLE ALBUM ("+"ID INTEGER NOT NULL,"+ "CODEALBUM INTEGER NOT NULL,"+"NOM CHAR(25) NOT NULL,"+"ARTISTEID INTEGER NOT NULL,"+"PRIMARY KEY(ID)"+")";
+	private final static String createChanson="CREATE TABLE CHANSON ("+"ID INTEGER NOT NULL,"+"CODECHANSON INTEGER NOT NULL,"+"NOM CHAR(25) NOT NULL,"+"DUREE INTEGER NOT NULL,"+"ALBUMID INTEGER NOT NULL,"+"PRIMARY KEY(ID)"+")";
 	
 	public DbUtils() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static void loadDriver() throws ClassNotFoundException{
@@ -33,33 +32,43 @@ public class DbUtils {
 	}
 	
 	public static Connection newConn() throws SQLException{
-		Connection conn=DriverManager.getConnection(url);
+		Connection conn=DriverManager.getConnection(url,"SA","");
 		return conn;
 	}
 	
 	//script to populate the database in the first place
 	public static void populate(){
 		//loading driver
-		try {
-			loadDriver();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		//connecting to database
 		Connection conn=null;
 		try {
+			loadDriver();
 			conn=newConn();
+			conn.setAutoCommit(false);
 			Statement st=conn.createStatement();
 			//batch creating the required tables
-			st.execute(createArtiste);
-			st.execute(createAlbum);
-			st.execute(createChanson);
+			st.addBatch(createArtiste);
+			st.addBatch(createAlbum);
+			st.addBatch(createChanson);
+			System.out.println(createArtiste);
+			conn.commit();
+			int[] tt=st.executeBatch();
+			for (int i:tt){
+				System.out.println(i);
+			}
+			st.close();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			conn.close();
+			
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		
 		
 		
 	}
@@ -85,9 +94,7 @@ public class DbUtils {
 		}
 		session.getTransaction().commit();
 		session.close();
-		sFact.close();
-			
-		
+		sFact.close();		
 		
 	}
 
