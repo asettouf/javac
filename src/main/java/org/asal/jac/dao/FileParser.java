@@ -14,10 +14,10 @@ import org.asal.jac.services.Chanson;
 import org.asal.jac.services.Main;
 
 public class FileParser {
-	private static File rightArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\right");
-	private  static File wrongArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\wrong");
+	private static File rightArchiveDir=new File(Main.getDefaultPath()+"\\right");
+	private  static File wrongArchiveDir=new File(Main.getDefaultPath()+"\\wrong");
 	
-	private static Logger logger=Logger.getLogger(Main.class);
+	private static Logger logger=Logger.getLogger(FileParser.class);
 
 
 	//Attention retour null si sub directory
@@ -29,13 +29,16 @@ public class FileParser {
 		if(dir.exists())
 			fileList=dir.listFiles();
 		else
+
+			logger.warn("Directory not found"+path);
 			fileList=null;
 		List<String> retour = new ArrayList<String>();
 		
 		for (File f:fileList){
 			System.out.println(f.toString());
 			if (!f.isFile()){
-				System.out.println("file "+f.getName()+" null");
+
+				logger.warn("File invalid : "+f);
 				continue;
 			}
 			System.out.println(f.getAbsolutePath());
@@ -71,7 +74,7 @@ public class FileParser {
 			retour=FileUtils.readLines(new File(path));
 			logger.info("File found: "+path);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn("File not found"+path);
 			e.printStackTrace();
 		}
 		
