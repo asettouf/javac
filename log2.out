@@ -1,0 +1,63 @@
+2014-01-08 01:44:07,668 [main] INFO  org.asal.jac.services.Main - Starting data writing program main function
+2014-01-08 01:44:07,679 [main] INFO  org.asal.jac.services.Main - Database loading
+2014-01-08 01:44:07,702 [main] INFO  org.asal.jac.services.Main - Driver loaded
+2014-01-08 01:44:08,138 [main] INFO  org.asal.jac.services.Main - Batch created
+2014-01-08 01:44:08,710 [main] INFO  org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.2.Final}
+2014-01-08 01:44:08,734 [main] INFO  org.hibernate.Version - HHH000412: Hibernate Core {4.2.8.Final}
+2014-01-08 01:44:08,740 [main] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+2014-01-08 01:44:08,743 [main] INFO  org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+2014-01-08 01:44:08,912 [main] INFO  org.hibernate.cfg.Configuration - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2014-01-08 01:44:08,914 [main] INFO  org.hibernate.cfg.Configuration - HHH000040: Configuration resource: /hibernate.cfg.xml
+2014-01-08 01:44:09,083 [main] INFO  org.hibernate.cfg.Configuration - HHH000221: Reading mappings from resource: Artiste.hbm.xml
+2014-01-08 01:44:09,356 [main] INFO  org.hibernate.cfg.Configuration - HHH000221: Reading mappings from resource: Album.hbm.xml
+2014-01-08 01:44:09,441 [main] INFO  org.hibernate.cfg.Configuration - HHH000221: Reading mappings from resource: Chanson.hbm.xml
+2014-01-08 01:44:09,622 [main] INFO  org.hibernate.cfg.Configuration - HHH000041: Configured SessionFactory: null
+2014-01-08 01:44:09,776 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2014-01-08 01:44:09,776 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20
+2014-01-08 01:44:09,786 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000006: Autocommit mode: false
+2014-01-08 01:44:09,787 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000401: using driver [org.hsqldb.jdbcDriver] at URL [jdbc:hsqldb:hsql://localhost/db]
+2014-01-08 01:44:09,788 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000046: Connection properties: {user=sa, password=****}
+2014-01-08 01:44:09,990 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.HSQLDialect
+2014-01-08 01:44:10,222 [main] INFO  org.hibernate.engine.transaction.internal.TransactionFactoryInitiator - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2014-01-08 01:44:10,234 [main] INFO  org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+2014-01-08 01:44:10,678 [main] INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate - HHH000228: Running hbm2ddl schema update
+2014-01-08 01:44:10,679 [main] INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate - HHH000102: Fetching database metadata
+2014-01-08 01:44:10,686 [main] INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate - HHH000396: Updating schema
+2014-01-08 01:44:10,741 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000261: Table found: PUBLIC.PUBLIC.ALBUM
+2014-01-08 01:44:10,741 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000037: Columns: [id, codealbum, artisteid, nom]
+2014-01-08 01:44:10,742 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000108: Foreign keys: [fk_o7itrsqsvhpivvvqrckdexpco]
+2014-01-08 01:44:10,742 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000126: Indexes: [sys_idx_sys_pk_10097_10098, sys_idx_10104]
+2014-01-08 01:44:10,774 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000261: Table found: PUBLIC.PUBLIC.ARTISTE
+2014-01-08 01:44:10,774 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000037: Columns: [id, codeartiste, nom]
+2014-01-08 01:44:10,775 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000108: Foreign keys: []
+2014-01-08 01:44:10,775 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000126: Indexes: [sys_idx_sys_pk_10093_10094]
+2014-01-08 01:44:10,827 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000261: Table found: PUBLIC.PUBLIC.CHANSON
+2014-01-08 01:44:10,827 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000037: Columns: [codechanson, id, duree, albumid, nom]
+2014-01-08 01:44:10,828 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000108: Foreign keys: [fk_hcfjntv9yo567l04bpofvuovs]
+2014-01-08 01:44:10,828 [main] INFO  org.hibernate.tool.hbm2ddl.TableMetadata - HHH000126: Indexes: [sys_idx_sys_pk_10102_10103, sys_idx_10106]
+2014-01-08 01:44:10,830 [main] INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate - HHH000232: Schema update complete
+2014-01-08 01:44:10,928 [main] INFO  org.asal.jac.services.Main - Commencing transfer of data to database
+2014-01-08 01:44:10,950 [main] INFO  org.asal.jac.services.Main - Starting to extract datas
+2014-01-08 01:44:10,950 [main] INFO  org.asal.jac.services.Main - Starting to list files
+2014-01-08 01:44:10,951 [main] INFO  org.asal.jac.services.Main - Listing done
+2014-01-08 01:44:10,951 [main] INFO  org.asal.jac.services.Main - Datas extracted
+2014-01-08 01:44:10,951 [main] INFO  org.asal.jac.services.Main - Reading lines from file : C:\Users\Adoo\Desktop\test\test.music
+2014-01-08 01:44:10,971 [main] INFO  org.asal.jac.services.Main - File found: C:\Users\Adoo\Desktop\test\test.music
+2014-01-08 01:44:10,971 [main] INFO  org.asal.jac.services.Main - Starting to check line : 1, NomArtiste, 1, NomAlbum, 1, TitreChanson, 123 
+2014-01-08 01:44:10,972 [main] INFO  org.asal.jac.services.Main - Line correct : 1, NomArtiste, 1, NomAlbum, 1, TitreChanson, 123 
+2014-01-08 01:44:10,972 [main] INFO  org.asal.jac.services.Main - File : C:\Users\Adoo\Desktop\test\test.music correct
+Stored in C:\Users\Adoo\Desktop\test\right
+2014-01-08 01:44:10,972 [main] INFO  org.asal.jac.services.Main - Starting to check line : 1, NomArtiste, 2, NomAlbum2, 2, TitreChanson2, 323 
+2014-01-08 01:44:10,972 [main] INFO  org.asal.jac.services.Main - Line correct : 1, NomArtiste, 2, NomAlbum2, 2, TitreChanson2, 323 
+2014-01-08 01:44:10,972 [main] INFO  org.asal.jac.services.Main - File : C:\Users\Adoo\Desktop\test\test.music correct
+Stored in C:\Users\Adoo\Desktop\test\right
+2014-01-08 01:44:10,973 [main] INFO  org.asal.jac.services.Main - Starting to check line : 2, NomArtiste2, 3, NomAlbum, 3, TitreChanson3, 333 
+2014-01-08 01:44:10,973 [main] INFO  org.asal.jac.services.Main - Line correct : 2, NomArtiste2, 3, NomAlbum, 3, TitreChanson3, 333 
+2014-01-08 01:44:10,973 [main] INFO  org.asal.jac.services.Main - File : C:\Users\Adoo\Desktop\test\test.music correct
+Stored in C:\Users\Adoo\Desktop\test\right
+2014-01-08 01:44:10,973 [main] INFO  org.asal.jac.services.Main - File correct,archived in directory C:\Users\Adoo\Desktop\test\right
+2014-01-08 01:44:10,974 [main] INFO  org.asal.jac.services.Main - Starting to write datas for file C:\Users\Adoo\Desktop\test\test.music in a Hash
+2014-01-08 01:44:10,975 [main] INFO  org.asal.jac.services.Main - Writing completed
+2014-01-08 01:44:11,151 [main] INFO  org.asal.jac.services.Main - Transfer done
+2014-01-08 01:44:11,154 [main] INFO  org.hibernate.service.jdbc.connections.internal.DriverManagerConnectionProviderImpl - HHH000030: Cleaning up connection pool [jdbc:hsqldb:hsql://localhost/db]
+2014-01-08 01:44:11,155 [main] INFO  org.asal.jac.services.Main - End of data writing program main function

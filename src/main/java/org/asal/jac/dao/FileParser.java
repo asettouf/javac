@@ -7,17 +7,23 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.asal.jac.services.Album;
 import org.asal.jac.services.Artiste;
 import org.asal.jac.services.Chanson;
+import org.asal.jac.services.Main;
 
 public class FileParser {
 	private static File rightArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\right");
 	private  static File wrongArchiveDir=new File("C:\\Users\\Adoo\\Desktop\\test\\wrong");
+	
+	private static Logger logger=Logger.getLogger(Main.class);
+
 
 	//Attention retour null si sub directory
 	//Si un fichier !.music alors, retrait de la liste
 	public static List<String> filesInDirectory(String path){
+		logger.info("Starting to list files");
 		File dir=new File(path);
 		File[] fileList;
 		if(dir.exists())
@@ -35,20 +41,21 @@ public class FileParser {
 			System.out.println(f.getAbsolutePath());
 			retour.add(f.getAbsolutePath());
 		}
+		logger.info("Listing done");
 		return retour;
 	}
 	
 	public static boolean checkLine(String line){
 		boolean retour=false;
 		String buff=line.replaceAll("\\s+","");
-		System.out.println(line);
+		logger.info("Starting to check line : "+line);
 		String[] extractLine=buff.split(",");
 		if (extractLine[0].matches("[0-9]*")&&extractLine[2].matches("[0-9]*")&&extractLine[4].matches("[0-9]*")&&extractLine[6].matches("[0-9]*")){
-			System.out.println("Number Artiste ok");
+			logger.info("Line correct : "+line);
 			retour=true;
 		}		
 		else{
-			System.out.println("Wrong format");
+			logger.info("Line wrong : "+line);
 			retour=false;
 		}
 		return retour;
@@ -58,10 +65,11 @@ public class FileParser {
 	//Attention retour null si mauvaise données
 	public static List<String> readLinesFromFile(String path){
 		List<String> retour=new ArrayList<String>();
+		logger.info("Reading lines from file : "+path);
 		boolean check=false;
 		try {
 			retour=FileUtils.readLines(new File(path));
-			System.out.println("File found: "+path);
+			logger.info("File found: "+path);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,12 +78,12 @@ public class FileParser {
 		for (String line:retour){
 			check=checkLine(line);
 			if (check==false){
-				System.out.println("Check wrong peace out");//archive file in wrong dir -> toDo
+				logger.info("File invalid : "+path+"\nIt will be stocked in"+wrongArchiveDir);//archive file in wrong dir -> toDo
 				archiveFile(path, wrongArchiveDir);
 				return null;
 			}
 			else
-				System.out.println("Check correct");
+				logger.info("File : "+path+" correct\nStored in "+rightArchiveDir);
 		}
 		return retour;
 	}
@@ -94,19 +102,24 @@ public class FileParser {
 	
 	//Boring, returns HashMap of HashMap supposedly containing everything we need
 	public static HashMap<Artiste, HashMap<Album, Chanson>> extractAlbumWithArtiste(String path){
+		logger.info("Starting to extract datas");
 		HashMap<Album, Chanson> mapAlbumChanson=new HashMap<Album,Chanson>();
 		HashMap<Artiste,HashMap<Album, Chanson>> retour = new HashMap<Artiste,HashMap<Album,Chanson>>();
 		List<String> files=filesInDirectory(path);
+		logger.info("Datas extracted");
 		for (String f:files){
 			List<String> data=null;
 			if (!f.contains(".music")){
+				logger.info("Wrong file, archived in directory : "+wrongArchiveDir);
 				archiveFile(f,wrongArchiveDir);
 				continue;
 			}
 			data=readLinesFromFile(f);
 			if (new File(f).exists()){
+				logger.info("File correct,archived in directory "+rightArchiveDir);
 				archiveFile(f,rightArchiveDir);
 			}
+			logger.info("Starting to write datas for file "+f+" in a Hash");
 				if (data!=null){
 					ArrayList<Artiste> memArtiste=new ArrayList<Artiste>();
 					int p=0;
@@ -144,6 +157,8 @@ public class FileParser {
 					mapAlbumChanson=new HashMap<Album,Chanson>();
 			}
 		}
+
+		logger.info("Writing completed");
 		return retour;
 	}
 	
