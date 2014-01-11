@@ -20,7 +20,7 @@ public class FileParser {
 	private static Logger logger=Logger.getLogger(FileParser.class);
 
 
-	//Attention retour null si sub directory
+	//Attention subdirectory
 	//Si un fichier !.music alors, retrait de la liste
 	public static List<String> filesInDirectory(String path){
 		logger.info("Starting to list files");
@@ -37,17 +37,18 @@ public class FileParser {
 		for (File f:fileList){
 			System.out.println(f.toString());
 			if (!f.isFile()){
-
 				logger.warn("File invalid : "+f);
 				continue;
 			}
-			System.out.println(f.getAbsolutePath());
+			logger.info("File :"+f.getAbsolutePath()+" added");
 			retour.add(f.getAbsolutePath());
 		}
 		logger.info("Listing done");
 		return retour;
 	}
 	
+	
+	//?
 	public static boolean checkLine(String line){
 		boolean retour=false;
 		String buff=line.replaceAll("\\s+","");
@@ -104,6 +105,7 @@ public class FileParser {
 	
 	
 	//Boring, returns HashMap of HashMap supposedly containing everything we need
+	//Need List<Chanson> in HashMap<Album,Chanson>
 	public static HashMap<Artiste, HashMap<Album, Chanson>> extractAlbumWithArtiste(String path){
 		logger.info("Starting to extract datas");
 		HashMap<Album, Chanson> mapAlbumChanson=new HashMap<Album,Chanson>();
