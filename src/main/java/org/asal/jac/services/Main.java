@@ -1,4 +1,12 @@
+/******************IMPORTANT**************************************
+ * PLEASE BE SURE TO READ THE README BEFORE LAUNCHING THE PROGRAM!
+ *******************************************************************/
+
+
 package org.asal.jac.services;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.asal.jac.dao.DbUtils;
@@ -6,13 +14,23 @@ import org.asal.jac.dao.DbUtils;
 public class Main {
 	private static Logger logger=Logger.getLogger(Main.class);
 	private static String defaultPath;
+	public static String defaultdb;
 
 	public Main() {
 	
 	}
 	
+	public static String dateToString(){
+		Calendar cal = Calendar.getInstance();
+    	cal.getTime();
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss");
+    	String now=sdf.format(cal.getTime());
+    	return now;
+	}
+	
 	public static void main(String[] args){
 		
+		defaultdb="jdbc:hsqldb:hsql://localhost/";
 		logger.info("Starting data writing program main function");
 		defaultPath=System.getProperty("user.home");
 		logger.info("Default path is currently : "+defaultPath);
@@ -33,9 +51,23 @@ public class Main {
 					logger.warn("Warning no directory indicated, using instead : "+defaultPath);
 				}
 			}
+			if(s.contains("dbname")){
+				if (i+1<=args.length){
+					logger.info("Initialising default db : "+args[i+1]);
+					defaultdb+=args[i+1];
+				}
+				
+				else{
+					defaultdb+="db";
+					logger.warn("Warning no db indicated, using instead : "+defaultdb);
+				}
+			}
 			
 		}
-		
+		if(defaultdb.equals("jdbc:hsqldb:hsql://localhost/")){
+			defaultdb+="db";
+			logger.warn("Initialising db to its default value : "+defaultdb);
+		}
 		if(defaultPath.equals(System.getProperty("user.home"))){
 				defaultPath+="\\MusicToRead";
 				logger.info("No directory indicated, using instead : "+defaultPath);

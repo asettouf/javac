@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.asal.jac.services.Album;
 import org.asal.jac.services.Artiste;
 import org.asal.jac.services.Chanson;
+import org.asal.jac.services.Main;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -80,9 +81,10 @@ public class DbUtils {
 	
 	
 	@SuppressWarnings("deprecation")
-	//write info on db, please specify the directory to find files
+	//write info on db with argument the directory where to find files
 	public static void writeToDb(String directory){
 		sFact=new Configuration().configure().buildSessionFactory();
+		new Configuration().configure().setProperty("connection.url",Main.defaultdb);
 		Session session=sFact.openSession();
 		session.beginTransaction();
 		logger.info("Commencing transfer of data to database");
@@ -93,7 +95,7 @@ public class DbUtils {
 				HashMap<Album, ArrayList<Chanson>> albumChansonHash=mapArtisteAlbumChanson.getValue();
 				artisteToSave=mapArtisteAlbumChanson.getKey();
 				session.save(artisteToSave);
-				System.out.println(artisteToSave.getNom());
+				logger.info(artisteToSave.getNom()+" saved");
 				Chanson chansonToSave=new Chanson();
 				Album albumToSave=new Album();
 				if (albumChansonHash!=null){
@@ -105,12 +107,12 @@ public class DbUtils {
 								chansonToSave=c;
 								albumToSave.addChanson(c);
 								session.save(chansonToSave);
-								System.out.println(chansonToSave.getNom());
+								logger.info(chansonToSave.getNom()+" saved");
 							}
 						}
 						artisteToSave.addAlbum(mapAlbumChanson.getKey());
 						session.save(albumToSave);
-						System.out.println(albumToSave.getNom());
+						logger.info(albumToSave.getNom()+" saved");
 					}
 					//session.save(albumToSave);
 				}

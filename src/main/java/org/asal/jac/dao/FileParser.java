@@ -14,14 +14,14 @@ import org.asal.jac.services.Chanson;
 import org.asal.jac.services.Main;
 
 public class FileParser {
-	private static File rightArchiveDir=new File(Main.getDefaultPath()+"\\right");
-	private  static File wrongArchiveDir=new File(Main.getDefaultPath()+"\\wrong");
+	private static File rightArchiveDir=new File(Main.getDefaultPath()+"\\right."+Main.dateToString());
+	private  static File wrongArchiveDir=new File(Main.getDefaultPath()+"\\wrong."+Main.dateToString());
 	
 	private static Logger logger=Logger.getLogger(FileParser.class);
 
 
-	//Attention subdirectory
-	//Si un fichier !.music alors, retrait de la liste
+	
+	//Listing files in directory function
 	public static List<String> filesInDirectory(String path){
 		logger.info("Starting to list files");
 		File dir=new File(path);
@@ -35,16 +35,11 @@ public class FileParser {
 		List<String> retour = new ArrayList<String>();
 		
 		for (File f:fileList){
-			System.out.println(f.toString());
 			if (!f.isFile()){
-				logger.warn("File invalid : "+f);
+				logger.warn("Not checking "+f.getAbsolutePath()+" is not a file");
 				continue;
 			}
 			
-			if (f.isDirectory()){
-				logger.info("Not checking "+f.getAbsolutePath()+" is a directory");
-				continue;
-			}
 			logger.info("File :"+f.getAbsolutePath()+" added");
 			retour.add(f.getAbsolutePath());
 		}
@@ -52,7 +47,7 @@ public class FileParser {
 		return retour;
 	}
 	
-	
+	//check line function
 	public static boolean checkLine(String line){
 		boolean retour=false;
 		String buff=line.replaceAll("\\s+","");
@@ -78,7 +73,7 @@ public class FileParser {
 		}
 	
 	
-	//Attention retour null si mauvaise données
+	//Reading lines function
 	public static List<String> readLinesFromFile(String path){
 		List<String> retour=new ArrayList<String>();
 		logger.info("Reading lines from file : "+path);
@@ -104,6 +99,7 @@ public class FileParser {
 		return retour;
 	}
 	
+	//archiving files function
 	public static void archiveFile(String file,File destDir){
 		File fileToArchive=new File(file);
 		try {
@@ -117,8 +113,8 @@ public class FileParser {
 	
 	
 	
-	//Boring, returns HashMap of HashMap supposedly containing everything we need
-	//Need List<Chanson> in HashMap<Album,Chanson>
+	
+	//function that create the architecture required to upload datas with hibernate
 	public static HashMap<Artiste, HashMap<Album,ArrayList<Chanson>>> extractAlbumWithArtiste(String path){
 		logger.info("Starting to extract datas");
 		ArrayList<Chanson> chansons=new ArrayList<Chanson>();
@@ -165,11 +161,11 @@ public class FileParser {
 						buffAlb.setCodeAlbum(Integer.parseInt(extractArray[2]));
 						buffAlb.setNom(extractArray[3]);
 						memAlbum.add(buffAlb);
-						if(p!=0&&!memAlbum.get(p).getNom().equals(memAlbum.get(p-1).getNom())){
+						if(p!=0&&!memAlbum.get(p).getNom().equals(memAlbum.get(p-1).getNom())&&data.size()!=1){
 							mapAlbumChanson.put(memAlbum.get(p-1), chansons);
 							chansons=new ArrayList<Chanson>();
 						}
-						if(p!=0&&!memArtiste.get(p).getNom().equals(memArtiste.get(p-1).getNom())){
+						if(p!=0&&!memArtiste.get(p).getNom().equals(memArtiste.get(p-1).getNom())&&data.size()!=1){
 							retour.put(memArtiste.get(p-1), mapAlbumChanson);
 							mapAlbumChanson=new HashMap<Album,ArrayList<Chanson>>();
 						}
