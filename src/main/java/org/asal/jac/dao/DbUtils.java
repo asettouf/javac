@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.asal.jac.services.Album;
 import org.asal.jac.services.Artiste;
 import org.asal.jac.services.Chanson;
-import org.asal.jac.services.Main;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -78,6 +78,7 @@ public class DbUtils {
 		
 	}
 	
+	
 	@SuppressWarnings("deprecation")
 	//write info on db, please specify the directory to find files
 	public static void writeToDb(String directory){
@@ -85,24 +86,33 @@ public class DbUtils {
 		Session session=sFact.openSession();
 		session.beginTransaction();
 		logger.info("Commencing transfer of data to database");
-		HashMap<Artiste,HashMap<Album, Chanson>> toWrite = FileParser.extractAlbumWithArtiste(directory);
+		HashMap<Artiste, HashMap<Album, ArrayList<Chanson>>> toWrite = FileParser.extractAlbumWithArtiste(directory);
 		if (toWrite!=null){
 			Artiste artisteToSave=new Artiste();
-			for(Map.Entry<Artiste, HashMap<Album, Chanson>> mapArtisteAlbumChanson :toWrite.entrySet()){
-				HashMap<Album,Chanson> albumChansonHash=mapArtisteAlbumChanson.getValue();
+			for(Map.Entry<Artiste, HashMap<Album, ArrayList<Chanson>>> mapArtisteAlbumChanson :toWrite.entrySet()){
+				HashMap<Album, ArrayList<Chanson>> albumChansonHash=mapArtisteAlbumChanson.getValue();
 				artisteToSave=mapArtisteAlbumChanson.getKey();
 				session.save(artisteToSave);
+				System.out.println(artisteToSave.getNom());
 				Chanson chansonToSave=new Chanson();
 				Album albumToSave=new Album();
 				if (albumChansonHash!=null){
-					for(Map.Entry<Album,Chanson> mapAlbumChanson:albumChansonHash.entrySet()){
-						chansonToSave=mapAlbumChanson.getValue();
+					for(Map.Entry<Album,ArrayList<Chanson>> mapAlbumChanson:albumChansonHash.entrySet()){
+						//chansonToSave=mapAlbumChanson.getValue();
 						albumToSave=mapAlbumChanson.getKey();
+						if(mapAlbumChanson!=null){
+							for(Chanson c:mapAlbumChanson.getValue()){
+								chansonToSave=c;
+								albumToSave.addChanson(c);
+								session.save(chansonToSave);
+								System.out.println(chansonToSave.getNom());
+							}
+						}
 						artisteToSave.addAlbum(mapAlbumChanson.getKey());
-						mapAlbumChanson.getKey().addChanson(mapAlbumChanson.getValue());
-						session.save(chansonToSave);
+						session.save(albumToSave);
+						System.out.println(albumToSave.getNom());
 					}
-					session.save(albumToSave);
+					//session.save(albumToSave);
 				}
 			}
 		}

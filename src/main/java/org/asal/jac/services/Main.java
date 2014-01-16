@@ -14,7 +14,7 @@ public class Main {
 	public static void main(String[] args){
 		
 		logger.info("Starting data writing program main function");
-		defaultPath=System.getProperty("user.home")+"\\MusicToRead";
+		defaultPath=System.getProperty("user.home");
 		logger.info("Default path is currently : "+defaultPath);
 		for (int i=0;i<args.length;i++){
 			String s = args[i];
@@ -23,23 +23,25 @@ public class Main {
 				DbUtils.populate();		
 			}
 			if(s.contains("directory")){
-				if (i+1<args.length){
+				if (i+1<=args.length){
 					logger.info("Initialising default directory : "+args[i+1]);
 					defaultPath+="\\"+args[i+1];
 				}
 				
 				else{
+					defaultPath+="\\MusicToRead";
 					logger.warn("Warning no directory indicated, using instead : "+defaultPath);
 				}
-			}
-			else{
-				defaultPath+="\\MusicToRead";
-				logger.info("No directory indicated, using instead : "+defaultPath);
 			}
 			
 		}
 		
-		DbUtils.writeToDb("C:\\Users\\Adoo\\Desktop\\test");
+		if(defaultPath.equals(System.getProperty("user.home"))){
+				defaultPath+="\\MusicToRead";
+				logger.info("No directory indicated, using instead : "+defaultPath);
+			}
+		
+		DbUtils.writeToDb(defaultPath);
 		logger.info("End of data writing program main function");
 		
 	}
