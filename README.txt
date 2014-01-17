@@ -65,6 +65,8 @@ The principle on which is based this application is simple :
 
 *The logs are located at the root of the projects with the name "appli.log"
 
+*A test file is given with the project with the name of "test"
+
 Please if you were to check any bugs, please send us a mail, we will respond as quickly as possible. And if you have any question don't hesitate to contact us.
 
 Cheers.
